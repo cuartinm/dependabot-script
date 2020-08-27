@@ -59,50 +59,14 @@ if ENV["GITHUB_ENTERPRISE_ACCESS_TOKEN"]
     api_endpoint: "https://#{ENV['GITHUB_ENTERPRISE_HOSTNAME']}/api/v3/",
     repo: repo_name,
     directory: directory,
-    branch: branch_name,
-  )
-elsif ENV["GITLAB_ACCESS_TOKEN"]
-  gitlab_hostname = ENV["GITLAB_HOSTNAME"] || "gitlab.com"
-
-  credentials << {
-    "type" => "git_source",
-    "host" => gitlab_hostname,
-    "username" => "x-access-token",
-    "password" => ENV["GITLAB_ACCESS_TOKEN"] # A GitLab access token with API permission
-  }
-
-  source = Dependabot::Source.new(
-    provider: "gitlab",
-    hostname: gitlab_hostname,
-    api_endpoint: "https://#{gitlab_hostname}/api/v4",
-    repo: repo_name,
-    directory: directory,
-    branch: branch_name,
-  )
-elsif ENV["AZURE_ACCESS_TOKEN"]
-  azure_hostname = ENV["AZURE_HOSTNAME"] || "dev.azure.com"
-
-  credentials << {
-    "type" => "git_source",
-    "host" => azure_hostname,
-    "username" => "x-access-token",
-    "password" => ENV["AZURE_ACCESS_TOKEN"]
-  }
-
-  source = Dependabot::Source.new(
-    provider: "azure",
-    hostname: azure_hostname,
-    api_endpoint: "https://#{azure_hostname}/",
-    repo: repo_name,
-    directory: directory,
-    branch: branch_name,
+    target_branch: branch_name,
   )
 else
   source = Dependabot::Source.new(
     provider: "github",
     repo: repo_name,
     directory: directory,
-    branch: branch_name,
+    target_branch: branch_name,
   )
 end
 
