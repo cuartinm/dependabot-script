@@ -24,9 +24,6 @@ repo_name = ENV["PROJECT_PATH"] # namespace/project
 # Directory where the base dependency files are.
 directory = ENV["DIRECTORY_PATH"] || "/"
 
-# Branch
-branch_name = ENV["BRANCH_NAME"]
-
 # Name of the package manager you'd like to do the update for. Options are:
 # - bundler
 # - pip (includes pipenv)
@@ -59,14 +56,14 @@ if ENV["GITHUB_ENTERPRISE_ACCESS_TOKEN"]
     api_endpoint: "https://#{ENV['GITHUB_ENTERPRISE_HOSTNAME']}/api/v3/",
     repo: repo_name,
     directory: directory,
-    branch: "feature/fargate",
+    branch: nil,
   )
 else
   source = Dependabot::Source.new(
     provider: "github",
     repo: repo_name,
     directory: directory,
-    branch: "feature/fargate",
+    branch: nil,
   )
 end
 
