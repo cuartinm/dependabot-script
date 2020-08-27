@@ -59,14 +59,14 @@ if ENV["GITHUB_ENTERPRISE_ACCESS_TOKEN"]
     api_endpoint: "https://#{ENV['GITHUB_ENTERPRISE_HOSTNAME']}/api/v3/",
     repo: repo_name,
     directory: directory,
-    branch: branch_name,
+    branch: "feature/fargate",
   )
 else
   source = Dependabot::Source.new(
     provider: "github",
     repo: repo_name,
     directory: directory,
-    branch: branch_name,
+    branch: "feature/fargate",
   )
 end
 
