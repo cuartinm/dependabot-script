@@ -142,6 +142,10 @@ dependencies.select(&:top_level?).each do |dep|
     credentials: credentials,
     assignees: [(ENV["PULL_REQUESTS_ASSIGNEE"] || ENV["GITLAB_ASSIGNEE_ID"])&.to_i],
     label_language: true,
+    author_details: {
+      email: "macuartin@gmail.com",
+      name: "MiguelBot"
+    },
   )
   pull_request = pr_creator.create
   puts " submitted"
