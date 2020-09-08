@@ -8,7 +8,8 @@ require "dependabot/file_updaters"
 require "dependabot/pull_request_creator"
 require "dependabot/omnibus"
 require "gitlab"
-require 'net/http'
+require "net/http"
+require "json"
 
 token = ENV["GITHUB_ACCESS_TOKEN"]
 
@@ -20,7 +21,6 @@ request = Net::HTTP::Post.new(uri.request_uri)
 request['Authorization'] = "token #{token}"
 response = http.request(request)
 json_response = JSON.parse(response.body)
-puts request['Authorization']
 puts json_response
 
 credentials = [
