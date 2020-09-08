@@ -13,7 +13,9 @@ require 'octokit'
 client = Octokit::Client.new(:access_token => ENV["GITHUB_ACCESS_TOKEN"])
 user = client.user 'cuartinm'
 puts user.name
-puts user.repos
+
+repositories = client.all_repositories
+puts repositories
 
 credentials = [
   {
