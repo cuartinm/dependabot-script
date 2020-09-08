@@ -11,7 +11,7 @@ require "gitlab"
 require 'octokit'
 
 client = Octokit::Client.new(:access_token => ENV["GITHUB_ACCESS_TOKEN"])
-user = client.user 'jbarnette'
+user = client.user 'cuartinm'
 puts user.name
 puts user.repos
 
