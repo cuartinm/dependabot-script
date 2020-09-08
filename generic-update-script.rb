@@ -20,6 +20,7 @@ request = Net::HTTP::Post.new(uri.request_uri)
 request['Authorization'] = "token #{token}"
 response = http.request(request)
 json_response = JSON.parse(response.body)
+puts request['Authorization']
 puts json_response
 
 credentials = [
