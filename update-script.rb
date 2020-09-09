@@ -10,6 +10,18 @@ require "dependabot/omnibus"
 require "gitlab"
 require 'octokit'
 
+package_manager_hash << {
+  "Ruby" => "bundler",
+  "Python" => "pip (includes pipenv)",
+  "HTML" => "npm_and_yarn",
+  "TypeScript" => "npm_and_yarn",
+  "JavaScript" => "npm_and_yarn",
+  "Java" => "gradle",
+  "Go" => "go_modules",
+  "Docker" => "docker",
+  "HCL" => "terraform"
+}
+
 client = Octokit::Client.new(:access_token => ENV["GITHUB_ACCESS_TOKEN"])
 user = client.user 'cuartinm'
 puts user.name
@@ -18,6 +30,7 @@ repositories = client.repos({}, query: {type: 'owner', sort: 'created'})
 repositories.each do |repo|
   puts repo.full_name
   puts repo.language
+  puts package_manager_hash[repo.language]
 end
 
 credentials = [
