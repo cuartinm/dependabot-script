@@ -17,6 +17,7 @@ puts user.name
 repositories = client.repos({}, query: {type: 'owner', sort: 'created'})
 repositories.each do |repo|
   puts repo.full_name
+  puts repo.language
 end
 
 credentials = [
