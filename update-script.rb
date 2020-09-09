@@ -22,66 +22,41 @@ package_manager_hash = {
   "HCL" => "terraform"
 }
 
+credentials = [
+  {
+    "type" => "git_source",
+    "host" => "github.com",
+    "username" => "x-access-token",
+    "password" => ENV["GITHUB_ACCESS_TOKEN"] # A GitHub access token with read access to public repos
+  }
+]
+
 client = Octokit::Client.new(:access_token => ENV["GITHUB_ACCESS_TOKEN"])
-user = client.user 'cuartinm'
-puts user.name
-
 repositories = client.repos({}, query: {type: 'owner', sort: 'created'})
-repositories.each do |repo|
 
-  credentials = [
-    {
-      "type" => "git_source",
-      "host" => "github.com",
-      "username" => "x-access-token",
-      "password" => ENV["GITHUB_ACCESS_TOKEN"] # A GitHub access token with read access to public repos
-    }
-  ]
+repositories.each do |repo|
 
   repo_name = repo.full_name
   directory = "/"
   package_manager = package_manager_hash[repo.language] || "bundler"
 
-  if ENV["GITHUB_ENTERPRISE_ACCESS_TOKEN"]
-    credentials << {
-      "type" => "git_source",
-      "host" => ENV["GITHUB_ENTERPRISE_HOSTNAME"], # E.g., "ghe.mydomain.com",
-      "username" => "x-access-token",
-      "password" => ENV["GITHUB_ENTERPRISE_ACCESS_TOKEN"] # A GHE access token with API permission
-    }
-  
-    source = Dependabot::Source.new(
-      provider: "github",
-      hostname: ENV["GITHUB_ENTERPRISE_HOSTNAME"],
-      api_endpoint: "https://#{ENV['GITHUB_ENTERPRISE_HOSTNAME']}/api/v3/",
-      repo: repo_name,
-      directory: directory,
-      branch: "develop",
-    )
-  else
-    source = Dependabot::Source.new(
-      provider: "github",
-      repo: repo_name,
-      directory: directory,
-      branch: "develop",
-    )
-  end
+  source = Dependabot::Source.new(
+    provider: "github",
+    repo: repo_name,
+    directory: directory,
+    branch: "develop",
+  )
 
-  ##############################
   # Fetch the dependency files #
-  ##############################
   puts "Fetching #{package_manager} dependency files for #{repo_name}"
   fetcher = Dependabot::FileFetchers.for_package_manager(package_manager).new(
     source: source,
     credentials: credentials,
   )
-
   files = fetcher.files
   commit = fetcher.commit
 
-  ##############################
   # Parse the dependency files #
-  ##############################
   puts "Parsing dependencies information"
   parser = Dependabot::FileParsers.for_package_manager(package_manager).new(
     dependency_files: files,
@@ -92,9 +67,7 @@ repositories.each do |repo|
   dependencies = parser.parse
 
   dependencies.select(&:top_level?).each do |dep|
-    #########################################
     # Get update details for the dependency #
-    #########################################
     checker = Dependabot::UpdateCheckers.for_package_manager(package_manager).new(
       dependency: dep,
       dependency_files: files,
@@ -119,9 +92,7 @@ repositories.each do |repo|
       requirements_to_unlock: requirements_to_unlock
     )
   
-    #####################################
     # Generate updated dependency files #
-    #####################################
     print "  - Updating #{dep.name} (from #{dep.version})…"
     updater = Dependabot::FileUpdaters.for_package_manager(package_manager).new(
       dependencies: updated_deps,
@@ -131,9 +102,7 @@ repositories.each do |repo|
   
     updated_files = updater.updated_dependency_files
   
-    ########################################
     # Create a pull request for the update #
-    ########################################
     pr_creator = Dependabot::PullRequestCreator.new(
       source: source,
       base_commit: commit,
@@ -152,18 +121,8 @@ repositories.each do |repo|
   
     next unless pull_request
   end
-  
-  puts "Done"
 
 
 end
 
-
-
-
-
-
-
-
-
-
+puts "Done"
