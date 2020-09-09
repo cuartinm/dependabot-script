@@ -10,7 +10,7 @@ require "dependabot/omnibus"
 require "gitlab"
 require 'octokit'
 
-package_manager_hash << {
+package_manager_hash = {
   "Ruby" => "bundler",
   "Python" => "pip (includes pipenv)",
   "HTML" => "npm_and_yarn",
