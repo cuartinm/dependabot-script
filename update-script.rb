@@ -19,7 +19,6 @@ package_manager_hash = {
   "Java" => "gradle",
   "Go" => "go_modules",
   "Docker" => "docker",
-  "HCL" => "terraform"
 }
 
 credentials = [
