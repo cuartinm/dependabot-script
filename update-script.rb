@@ -14,18 +14,9 @@ client = Octokit::Client.new(:access_token => ENV["GITHUB_ACCESS_TOKEN"])
 user = client.user 'cuartinm'
 puts user.name
 
-# repositories = client.repos({}, query: {type: 'owner', sort: 'asc'})
-# puts repositories[]
-
-client.repos.each do |repo|
+repositories = client.repos({}, query: {type: 'owner', sort: 'asc'})
+client.repositories.each do |repo|
   puts repo.name
-  puts repo.description
-
-  # find the urls
-  puts repo.rels[:html].href
-  puts repo.rels[:git].href
-  puts repo.rels[:clone].href
-  puts repo.rels[:ssh].href
 end
 
 credentials = [
