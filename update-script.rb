@@ -14,8 +14,8 @@ client = Octokit::Client.new(:access_token => ENV["GITHUB_ACCESS_TOKEN"])
 user = client.user 'cuartinm'
 puts user.name
 
-repositories = client.repos({}, query: {type: 'owner', sort: 'asc'})
-client.repositories.each do |repo|
+repositories = client.repos({}, query: {type: 'owner', sort: 'created'})
+repositories.each do |repo|
   puts repo.full_name
 end
 
