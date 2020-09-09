@@ -15,7 +15,7 @@ user = client.user 'cuartinm'
 puts user.name
 
 repositories = client.repos({}, query: {type: 'owner', sort: 'asc'})
-puts repositories.url
+puts repositories[:url]
 
 credentials = [
   {
