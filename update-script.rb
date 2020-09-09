@@ -44,7 +44,7 @@ repositories.each do |repo|
     provider: "github",
     repo: repo_name,
     directory: directory,
-    branch: "develop",
+    branch: nil,
   )
 
   # Fetch the dependency files #
